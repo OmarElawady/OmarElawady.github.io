@@ -50,9 +50,14 @@ Renderer.prototype.addPoint = function(a, eng){
 Renderer.prototype.draw = function(ps, t){
   var n = ps.length;
   if(n < 2)return 0;
-  for(var i = 0;i < n - 1;i++){
-    this.addLine(ps[i], ps[i + 1]);
+  var c =  document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  c.setAttribute("style", "stroke:rgb(139,0,0);stroke-width:2");
+  var path = "M " + ps[0].x + " " + ps[0].y;
+  for(var i = 1;i < n;i++){
+    path += " L " + ps[i].x + " " + ps[i].y;    
   }
+  c.setAttribute("d", path);
+  this.svg.appendChild(c);  
   this.draw(Bez.reduce(ps, t), t);
 }
 
