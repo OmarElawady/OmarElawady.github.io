@@ -142,6 +142,7 @@ Engine.prototype.deactivate = function(){
 }
 
 Engine.prototype.saveState = function(){
+  if(this.state.points.length == 0)return document.location.protocol +"//"+ document.location.hostname + document.location.pathname; 
   var st = "";
   for(var i = 0;i < this.state.points.length;i++){
     if(i)
