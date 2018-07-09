@@ -1,19 +1,6 @@
 <html>
 <head>
-<style>
-.bezier{
-  border: 2px solid black;
-  background-color: black;
-}
-.control{
-  position: absolute;
-  z-index: 99;
-}
-.boundary{
-stroke:rgb(255,0,0);
-stroke-width:2;
-}
-</style>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <script src = "js/math.js"></script>
@@ -21,20 +8,23 @@ stroke-width:2;
 <script src = "js/state.js"></script>
 <script src = "js/render.js"></script>
 <script src = "js/engine.js"></script>
-<svg id = "bezier" class = "bezier" height = "500" width = "500">
+<svg id = "bezier" class = "bezier" height = "500" width = "800">
 
 </svg>
-<br />
+
+<div class = "controller">
 <button id = "run">animte</button>
 <button id = "save">save</button>
+</div>
 <input type = "range" id = "range"></input>
-<br />
-
-<input id = "lines" type="checkbox" checked></input>lines
-<br />
-<input id = "points" type="checkbox" checked></input>points
-<br />
-<input id = "curve" type="checkbox" checked></input>curve
+<div class="check">
+  <label>show/hide</label>
+  <ul>
+    <li><input id = "lines"  type="checkbox"> lines</li>
+    <li><input id = "points"  type="checkbox"> points</li>
+    <li><input id = "curve"  type="checkbox"> curve</li>
+  </ul>
+</div>
 <script>
 var e = new Engine(document.getElementById("bezier"),
 document.getElementById("run"),
