@@ -1,0 +1,54 @@
+<html>
+<head>
+<style>
+.bezier{
+  border: 2px solid black;
+  background-color: black;
+}
+.control{
+  position: absolute;
+  z-index: 99;
+}
+.boundary{
+stroke:rgb(255,0,0);
+stroke-width:2;
+}
+</style>
+</head>
+<body>
+<script src = "math.js"></script>
+<script src = "point.js"></script>
+<script src = "state.js"></script>
+<script src = "render.js"></script>
+<script src = "engine.js"></script>
+<svg id = "bezier" class = "bezier" height = "500" width = "500">
+
+</svg>
+<br />
+<button id = "run">animte</button>
+<button id = "save">save</button>
+<input type = "range" id = "range"></input>
+<br />
+
+<input id = "lines" type="checkbox" checked></input>lines
+<br />
+<input id = "points" type="checkbox" checked></input>points
+<br />
+<input id = "curve" type="checkbox" checked></input>curve
+<script>
+var e = new Engine(document.getElementById("bezier"),
+document.getElementById("run"),
+document.getElementById("range"));
+
+var url = document.URL;
+if(url.indexOf('#') != -1){
+  e.loadState(url.split('#')[1]);
+}
+
+document.getElementById("save").addEventListener("click", function(evt){
+  alert(e.saveState());
+});
+
+</script>
+</body>
+</html>
