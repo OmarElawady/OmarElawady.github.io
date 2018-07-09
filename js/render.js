@@ -51,7 +51,9 @@ Renderer.prototype.draw = function(ps, t){
   var n = ps.length;
   if(n < 2)return 0;
   var c =  document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  c.setAttribute("style", "stroke:rgb(139,0,0);stroke-width:2");
+  c.setAttribute("stroke", "rgb(139,0,0)");
+  c.setAttribute("stroke-width", "2");
+  c.setAttribute("fill", "none");
   var path = "M " + ps[0].x + " " + ps[0].y;
   for(var i = 1;i < n;i++){
     path += " L " + ps[i].x + " " + ps[i].y;    
