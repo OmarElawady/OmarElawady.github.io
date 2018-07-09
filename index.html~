@@ -16,11 +16,11 @@ stroke-width:2;
 </style>
 </head>
 <body>
-<script src = "js/math.js"></script>
-<script src = "js/point.js"></script>
-<script src = "js/state.js"></script>
-<script src = "js/render.js"></script>
-<script src = "js/engine.js"></script>
+<script src = "math.js"></script>
+<script src = "point.js"></script>
+<script src = "state.js"></script>
+<script src = "render.js"></script>
+<script src = "engine.js"></script>
 <svg id = "bezier" class = "bezier" height = "500" width = "500">
 
 </svg>
