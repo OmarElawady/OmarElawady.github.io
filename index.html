@@ -25,6 +25,13 @@
     <li><input id = "curve"  type="checkbox" checked> curve</li>
   </ul>
 </div>
+<div id = "overlay" >
+<div id = "popup">
+    <p id = "url"></p>
+    <button id = "close" onclick = "this.parentElement.parentElement.style.display = 'none'">close</button>
+
+ </div>
+</div>
 <script>
 var e = new Engine(document.getElementById("bezier"),
 document.getElementById("run"),
@@ -36,7 +43,9 @@ if(url.indexOf('#') != -1){
 }
 
 document.getElementById("save").addEventListener("click", function(evt){
-  alert(e.saveState());
+  document.getElementById("url").innerHTML = e.saveState();
+  document.getElementById("overlay").style.display = "block";
+  
 });
 
 </script>
