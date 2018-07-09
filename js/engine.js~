@@ -157,7 +157,6 @@ Engine.prototype.loadState = function(str){
   for(var i = 0;i < axis.length;i += 2){
     this.state.addPoint(+axis[i], +axis[i + 1]);
   }
-  this.state.setTime(t);
   this.renderer.render(this.state, this);
 }
 
