@@ -1,0 +1,1213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.2" />
+<title>parser API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>parser</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ConfigData:
+    &#34;&#34;&#34;Data structure to store the result of the ini parsing.&#34;&#34;&#34;
+    def __init__(self):
+        &#34;&#34;&#34;Base for ConfigData
+        
+        data: dict of dicts to store the sections
+        &#34;&#34;&#34;
+        self.data = {}
+
+
+    def setProperty(self, section, key, val):
+        &#34;&#34;&#34;Sets a new property within the given section.
+        
+        Arguments:
+            section {str} -- the name of the section
+            key     {str} -- the name of the key
+            val     {str} -- the value associated with the key
+        &#34;&#34;&#34;
+        section = section.lower()
+        key = key.lower()
+        val = val.lower()
+        if not section in self.data:
+            self.data[section] = {}
+        self.data[section][key] = val
+    
+    
+    def hasSection(self, section):
+        &#34;&#34;&#34;Checks whether the data contains the given section.
+        
+        Arguments:
+            section {str} -- the name of the section
+        
+        Returns:
+            bool -- true if the section exists
+        &#34;&#34;&#34;
+        section = section.lower()
+        return section in self.data
+    
+    
+    def getProperty(self, section, key):
+        &#34;&#34;&#34;Gets the value in the given section associated with key.
+        
+        Arguments:
+            section {str} -- the name of the section
+            key     {str} -- the key
+        
+        Raises:
+            KeyError if section doesn&#39;t exist or key doesn&#39;t exist in section
+        
+        Returns:
+            str -- ConfigData[section][key]
+        &#34;&#34;&#34;
+        section = section.lower()
+        key = key.lower()
+        return self.data[section][key]
+    
+    
+    def sectionsCount(self):
+        &#34;&#34;&#34;Finds the number of section currently stored.
+        
+        Returns:
+            int -- the number of sections
+        &#34;&#34;&#34;
+        return len(list(filter(lambda x: type(x) == dict, self.data.values())))
+    
+    
+    def hasProperty(self, section, key):
+        &#34;&#34;&#34;Checks whether there key exists in the given section.
+        
+        Arguments:
+            section {str} -- the name of the section
+            key     {str} -- the name of the key
+
+        Returns:
+            bool -- True if ConfigData[section][key] exists
+        &#34;&#34;&#34;
+        section = section.lower()
+        key = key.lower()
+        return section in self.data and key in self.data[section]
+    
+    
+    def getSection(self, section):
+        &#34;&#34;&#34;Extracts the data in the section.
+        
+        Arguments:
+            section {str} -- the name of the section
+        
+        Raises:
+            KeyError -- when the section doesn&#39;t exist
+        
+        Returns:
+            dict -- the key value map of the passed section
+        &#34;&#34;&#34;
+        section = section.lower()
+        return self.data[section]
+    
+    
+    def deleteProperty(self, section, key):
+        &#34;&#34;&#34;Deletes the given key in the given section.
+
+        Arguments:
+            section {str} -- the name of the section
+            key     {str} -- the name of the key
+
+        Raises:
+            KeyError -- if the section or the key in the section doesn&#39;t exist
+        &#34;&#34;&#34;
+        section = section.lower()
+        key = key.lower()
+        del self.data[section][key]
+    
+    
+    def getGlobalProperty(self, key):
+        &#34;&#34;&#34;Extracts the global value associated with the given key.
+
+        Arguments:
+            ket {str} -- the key of the global property
+
+        Raises:
+            KeyError -- if the key doesn&#39;t exist
+
+        Returns:
+            str -- the value of the property
+        &#34;&#34;&#34;
+        key = key.lower()
+        return self.data[key]
+    
+    
+    def setGlobalProperty(self, key, val):
+        &#34;&#34;&#34;Sets the value associated with the passed key to val.
+
+        Arguments:
+            key {str} -- the key of the global property
+            val {str} -- the value to be stored
+
+        Raises:
+            KeyError -- if the key doesn&#39;t exist
+        &#34;&#34;&#34;
+        key = key.lower()
+        val = val.lower()
+        self.data[key] = val
+    
+    
+    def toIniString(self):
+        &#34;&#34;&#34;Extracts a printable representation of the config data.
+        
+        Returns:
+            str -- a string in the for of dict of dicts
+        &#34;&#34;&#34;
+        return str(self.data)
+
+
+
+class Parser:
+    def __init__(self):
+        &#34;&#34;&#34;Base for parser.
+        
+        parseOutput: The value to which the parse output will be stored
+        &#34;&#34;&#34;
+        self.parseOutput = ConfigData()
+
+
+    def parse(self, string):
+        &#34;&#34;&#34;Parses the given string in the ini format.
+
+        Arguments:
+            string {str} -- a string representing the ini file in its format
+
+        Raises:
+            Exception -- if it reads a line which can&#39;t be processes (not a comment, key=value nor [section])
+
+        Returns:
+            ConfigData -- an object with the parsed data
+        &#34;&#34;&#34;
+        currentSection = &#34;&#34;
+        for line in string.split(&#39;\n&#39;):
+            line = line.strip()
+            if self.is_comment(line) or self.is_empty(line):
+                continue
+            elif self.is_keyval(line):
+                keyval = self.parseKey(line)
+                self.addEntry(currentSection, keyval[0], keyval[1])
+            elif self.is_section(line):
+                currentSection = line[1:-1]
+            else:
+                raise Exception(&#34;Can&#39;t process line {}&#34;.format(line))
+        return self.parseOutput
+
+
+    def is_keyval(self, line):
+        &#34;&#34;&#34;Checks whether the given line represents a key value pair.
+        
+        Arguments:
+            line {str} -- the line to be checked
+        
+        Returns:
+            bool -- true if the line is unindented, in the form key = value and the key doesn&#39;t contain the character ;
+        &#34;&#34;&#34;
+        pos = line.find(&#39;=&#39;);
+        return pos != -1 and line[0:pos].find(&#39;=&#39;) == -1 and line[0:pos].find(&#39;;&#39;) == -1
+
+
+    def is_section(self, line):
+        &#34;&#34;&#34;Checks whether the given line represents a section.
+
+        Arguments:
+            line {str} -- the line to be checked
+        
+        Returns:
+            bool -- true if the line is unindented, in the form [section] and section doesn&#39;t contain the character &#39;]&#39;
+        &#34;&#34;&#34;
+        return len(line) &gt; 2 and line[0] == &#39;[&#39; and line[-1] == &#39;]&#39; and line[1:-1].find(&#39;]&#39;) == -1
+
+
+    def is_comment(self, line):
+        &#34;&#34;&#34;Checks whether the given line represents a comment.
+
+        Arguments:
+            line {str} -- the line to be checked
+
+        Returns:
+            bool -- true if the line is unindented and starts with ; and #
+        &#34;&#34;&#34;
+
+        return len(line) &gt; 0 and (line[0] == &#39;;&#39; or line[0] == &#39;#&#39;)
+    def is_empty(self, line):
+        &#34;&#34;&#34;Checks whether the given line is empty.
+
+        Arguments:
+            line {str} -- the line to be checked
+
+        Returns:
+            bool -- true if the line is empty
+        &#34;&#34;&#34;
+        return len(line) == 0
+
+
+    def parseKey(self, line):
+        &#34;&#34;&#34;Parses the line and extracts the key and value from it.
+
+        Arguments:
+            line {str} -- the line to be parsed
+        
+        Returns:
+            list -- in the form [key, value]
+        &#34;&#34;&#34;
+        return list(map(lambda l : l.strip(), line.split(&#39;=&#39;, 1)))
+
+
+    def addEntry(self, section, key, val):
+        &#34;&#34;&#34;Adds the entry with the given specifications to the ConfiData object.
+        
+        section is empty when no section has been entered(i.e. it&#39;s a global property)
+
+        Arguments:
+            section {str} -- the name of the section
+            key     {str} -- the name of the key
+            val     {str} -- the value to be stored
+        &#34;&#34;&#34;
+        if section == &#34;&#34;: # global property
+            self.parseOutput.setGlobalProperty(key, val)
+        else:
+            self.parseOutput.setProperty(section, key, val)
+
+
+def parseIni(string):
+    &#34;&#34;&#34;Parses the given string and returns the data in an appropriate form.
+
+    Arguments:
+        string {str} -- the string representation of the INI file
+    
+    Raises:
+        Exception -- if a line is of no known type
+
+    Returns:
+        ConfigData -- an object with the parsed data
+    &#34;&#34;&#34;
+    return Parser().parse(string)
+if __name__ == &#34;__main__&#34;:    
+    sample1 = &#34;&#34;&#34;
+    a = b
+    [general]
+    appname = configparser
+    version = 0.1
+    
+    [author]
+    name = xmonader
+    email = notxmonader@gmail.com
+
+    &#34;&#34;&#34;
+    d = parseIni(sample1)
+    print(d.toIniString())</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="parser.parseIni"><code class="name flex">
+<span>def <span class="ident">parseIni</span></span>(<span>string)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Parses the given string and returns the data in an appropriate form.</p>
+<h2 id="arguments">Arguments</h2>
+<p>string {str} &ndash; the string representation of the INI file</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>Exception</code> &ndash; <code>if</code> <code>a</code> <code>line</code> <code>is</code> of <code>no</code> <code>known</code> <code>type</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><a title="parser.ConfigData" href="#parser.ConfigData"><code>ConfigData</code></a> &ndash; <code>an</code> <code>object</code> <code>with</code> <code>the</code> <code>parsed</code> <code>data</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def parseIni(string):
+    &#34;&#34;&#34;Parses the given string and returns the data in an appropriate form.
+
+    Arguments:
+        string {str} -- the string representation of the INI file
+    
+    Raises:
+        Exception -- if a line is of no known type
+
+    Returns:
+        ConfigData -- an object with the parsed data
+    &#34;&#34;&#34;
+    return Parser().parse(string)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="parser.ConfigData"><code class="flex name class">
+<span>class <span class="ident">ConfigData</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Data structure to store the result of the ini parsing.</p>
+<p>Base for ConfigData</p>
+<p>data: dict of dicts to store the sections</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ConfigData:
+    &#34;&#34;&#34;Data structure to store the result of the ini parsing.&#34;&#34;&#34;
+    def __init__(self):
+        &#34;&#34;&#34;Base for ConfigData
+        
+        data: dict of dicts to store the sections
+        &#34;&#34;&#34;
+        self.data = {}
+
+
+    def setProperty(self, section, key, val):
+        &#34;&#34;&#34;Sets a new property within the given section.
+        
+        Arguments:
+            section {str} -- the name of the section
+            key     {str} -- the name of the key
+            val     {str} -- the value associated with the key
+        &#34;&#34;&#34;
+        section = section.lower()
+        key = key.lower()
+        val = val.lower()
+        if not section in self.data:
+            self.data[section] = {}
+        self.data[section][key] = val
+    
+    
+    def hasSection(self, section):
+        &#34;&#34;&#34;Checks whether the data contains the given section.
+        
+        Arguments:
+            section {str} -- the name of the section
+        
+        Returns:
+            bool -- true if the section exists
+        &#34;&#34;&#34;
+        section = section.lower()
+        return section in self.data
+    
+    
+    def getProperty(self, section, key):
+        &#34;&#34;&#34;Gets the value in the given section associated with key.
+        
+        Arguments:
+            section {str} -- the name of the section
+            key     {str} -- the key
+        
+        Raises:
+            KeyError if section doesn&#39;t exist or key doesn&#39;t exist in section
+        
+        Returns:
+            str -- ConfigData[section][key]
+        &#34;&#34;&#34;
+        section = section.lower()
+        key = key.lower()
+        return self.data[section][key]
+    
+    
+    def sectionsCount(self):
+        &#34;&#34;&#34;Finds the number of section currently stored.
+        
+        Returns:
+            int -- the number of sections
+        &#34;&#34;&#34;
+        return len(list(filter(lambda x: type(x) == dict, self.data.values())))
+    
+    
+    def hasProperty(self, section, key):
+        &#34;&#34;&#34;Checks whether there key exists in the given section.
+        
+        Arguments:
+            section {str} -- the name of the section
+            key     {str} -- the name of the key
+
+        Returns:
+            bool -- True if ConfigData[section][key] exists
+        &#34;&#34;&#34;
+        section = section.lower()
+        key = key.lower()
+        return section in self.data and key in self.data[section]
+    
+    
+    def getSection(self, section):
+        &#34;&#34;&#34;Extracts the data in the section.
+        
+        Arguments:
+            section {str} -- the name of the section
+        
+        Raises:
+            KeyError -- when the section doesn&#39;t exist
+        
+        Returns:
+            dict -- the key value map of the passed section
+        &#34;&#34;&#34;
+        section = section.lower()
+        return self.data[section]
+    
+    
+    def deleteProperty(self, section, key):
+        &#34;&#34;&#34;Deletes the given key in the given section.
+
+        Arguments:
+            section {str} -- the name of the section
+            key     {str} -- the name of the key
+
+        Raises:
+            KeyError -- if the section or the key in the section doesn&#39;t exist
+        &#34;&#34;&#34;
+        section = section.lower()
+        key = key.lower()
+        del self.data[section][key]
+    
+    
+    def getGlobalProperty(self, key):
+        &#34;&#34;&#34;Extracts the global value associated with the given key.
+
+        Arguments:
+            ket {str} -- the key of the global property
+
+        Raises:
+            KeyError -- if the key doesn&#39;t exist
+
+        Returns:
+            str -- the value of the property
+        &#34;&#34;&#34;
+        key = key.lower()
+        return self.data[key]
+    
+    
+    def setGlobalProperty(self, key, val):
+        &#34;&#34;&#34;Sets the value associated with the passed key to val.
+
+        Arguments:
+            key {str} -- the key of the global property
+            val {str} -- the value to be stored
+
+        Raises:
+            KeyError -- if the key doesn&#39;t exist
+        &#34;&#34;&#34;
+        key = key.lower()
+        val = val.lower()
+        self.data[key] = val
+    
+    
+    def toIniString(self):
+        &#34;&#34;&#34;Extracts a printable representation of the config data.
+        
+        Returns:
+            str -- a string in the for of dict of dicts
+        &#34;&#34;&#34;
+        return str(self.data)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="parser.ConfigData.deleteProperty"><code class="name flex">
+<span>def <span class="ident">deleteProperty</span></span>(<span>self, section, key)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Deletes the given key in the given section.</p>
+<h2 id="arguments">Arguments</h2>
+<p>section {str} &ndash; the name of the section
+key
+{str} &ndash; the name of the key</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>KeyError</code> &ndash; <code>if</code> <code>the</code> <code>section</code> or <code>the</code> <code>key</code> <code>in</code> <code>the</code> <code>section</code> <code>doesn't</code> <code>exist</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def deleteProperty(self, section, key):
+    &#34;&#34;&#34;Deletes the given key in the given section.
+
+    Arguments:
+        section {str} -- the name of the section
+        key     {str} -- the name of the key
+
+    Raises:
+        KeyError -- if the section or the key in the section doesn&#39;t exist
+    &#34;&#34;&#34;
+    section = section.lower()
+    key = key.lower()
+    del self.data[section][key]</code></pre>
+</details>
+</dd>
+<dt id="parser.ConfigData.getGlobalProperty"><code class="name flex">
+<span>def <span class="ident">getGlobalProperty</span></span>(<span>self, key)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Extracts the global value associated with the given key.</p>
+<h2 id="arguments">Arguments</h2>
+<p>ket {str} &ndash; the key of the global property</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>KeyError</code> &ndash; <code>if</code> <code>the</code> <code>key</code> <code>doesn't</code> <code>exist</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code> &ndash; <code>the</code> <code>value</code> of <code>the</code> <code>property</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getGlobalProperty(self, key):
+    &#34;&#34;&#34;Extracts the global value associated with the given key.
+
+    Arguments:
+        ket {str} -- the key of the global property
+
+    Raises:
+        KeyError -- if the key doesn&#39;t exist
+
+    Returns:
+        str -- the value of the property
+    &#34;&#34;&#34;
+    key = key.lower()
+    return self.data[key]</code></pre>
+</details>
+</dd>
+<dt id="parser.ConfigData.getProperty"><code class="name flex">
+<span>def <span class="ident">getProperty</span></span>(<span>self, section, key)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Gets the value in the given section associated with key.</p>
+<h2 id="arguments">Arguments</h2>
+<p>section {str} &ndash; the name of the section
+key
+{str} &ndash; the key</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>KeyError</code> <code>if</code> <code>section</code> <code>doesn't</code> <code>exist</code> or <code>key</code> <code>doesn't</code> <code>exist</code> <code>in</code> <code>section</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code> &ndash; <a title="parser.ConfigData" href="#parser.ConfigData"><code>ConfigData</code></a>[<code>section</code>][<code>key</code>]</dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getProperty(self, section, key):
+    &#34;&#34;&#34;Gets the value in the given section associated with key.
+    
+    Arguments:
+        section {str} -- the name of the section
+        key     {str} -- the key
+    
+    Raises:
+        KeyError if section doesn&#39;t exist or key doesn&#39;t exist in section
+    
+    Returns:
+        str -- ConfigData[section][key]
+    &#34;&#34;&#34;
+    section = section.lower()
+    key = key.lower()
+    return self.data[section][key]</code></pre>
+</details>
+</dd>
+<dt id="parser.ConfigData.getSection"><code class="name flex">
+<span>def <span class="ident">getSection</span></span>(<span>self, section)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Extracts the data in the section.</p>
+<h2 id="arguments">Arguments</h2>
+<p>section {str} &ndash; the name of the section</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>KeyError</code> &ndash; <code>when</code> <code>the</code> <code>section</code> <code>doesn't</code> <code>exist</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code> &ndash; <code>the</code> <code>key</code> <code>value</code> <code>map</code> of <code>the</code> <code>passed</code> <code>section</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def getSection(self, section):
+    &#34;&#34;&#34;Extracts the data in the section.
+    
+    Arguments:
+        section {str} -- the name of the section
+    
+    Raises:
+        KeyError -- when the section doesn&#39;t exist
+    
+    Returns:
+        dict -- the key value map of the passed section
+    &#34;&#34;&#34;
+    section = section.lower()
+    return self.data[section]</code></pre>
+</details>
+</dd>
+<dt id="parser.ConfigData.hasProperty"><code class="name flex">
+<span>def <span class="ident">hasProperty</span></span>(<span>self, section, key)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Checks whether there key exists in the given section.</p>
+<h2 id="arguments">Arguments</h2>
+<p>section {str} &ndash; the name of the section
+key
+{str} &ndash; the name of the key</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code> &ndash; <code>True</code> <code>if</code> <a title="parser.ConfigData" href="#parser.ConfigData"><code>ConfigData</code></a>[<code>section</code>][<code>key</code>] <code>exists</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def hasProperty(self, section, key):
+    &#34;&#34;&#34;Checks whether there key exists in the given section.
+    
+    Arguments:
+        section {str} -- the name of the section
+        key     {str} -- the name of the key
+
+    Returns:
+        bool -- True if ConfigData[section][key] exists
+    &#34;&#34;&#34;
+    section = section.lower()
+    key = key.lower()
+    return section in self.data and key in self.data[section]</code></pre>
+</details>
+</dd>
+<dt id="parser.ConfigData.hasSection"><code class="name flex">
+<span>def <span class="ident">hasSection</span></span>(<span>self, section)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Checks whether the data contains the given section.</p>
+<h2 id="arguments">Arguments</h2>
+<p>section {str} &ndash; the name of the section</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code> &ndash; <code>true</code> <code>if</code> <code>the</code> <code>section</code> <code>exists</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def hasSection(self, section):
+    &#34;&#34;&#34;Checks whether the data contains the given section.
+    
+    Arguments:
+        section {str} -- the name of the section
+    
+    Returns:
+        bool -- true if the section exists
+    &#34;&#34;&#34;
+    section = section.lower()
+    return section in self.data</code></pre>
+</details>
+</dd>
+<dt id="parser.ConfigData.sectionsCount"><code class="name flex">
+<span>def <span class="ident">sectionsCount</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Finds the number of section currently stored.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>int</code> &ndash; <code>the</code> <code>number</code> of <code>sections</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def sectionsCount(self):
+    &#34;&#34;&#34;Finds the number of section currently stored.
+    
+    Returns:
+        int -- the number of sections
+    &#34;&#34;&#34;
+    return len(list(filter(lambda x: type(x) == dict, self.data.values())))</code></pre>
+</details>
+</dd>
+<dt id="parser.ConfigData.setGlobalProperty"><code class="name flex">
+<span>def <span class="ident">setGlobalProperty</span></span>(<span>self, key, val)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the value associated with the passed key to val.</p>
+<h2 id="arguments">Arguments</h2>
+<p>key {str} &ndash; the key of the global property
+val {str} &ndash; the value to be stored</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>KeyError</code> &ndash; <code>if</code> <code>the</code> <code>key</code> <code>doesn't</code> <code>exist</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setGlobalProperty(self, key, val):
+    &#34;&#34;&#34;Sets the value associated with the passed key to val.
+
+    Arguments:
+        key {str} -- the key of the global property
+        val {str} -- the value to be stored
+
+    Raises:
+        KeyError -- if the key doesn&#39;t exist
+    &#34;&#34;&#34;
+    key = key.lower()
+    val = val.lower()
+    self.data[key] = val</code></pre>
+</details>
+</dd>
+<dt id="parser.ConfigData.setProperty"><code class="name flex">
+<span>def <span class="ident">setProperty</span></span>(<span>self, section, key, val)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets a new property within the given section.</p>
+<h2 id="arguments">Arguments</h2>
+<p>section {str} &ndash; the name of the section
+key
+{str} &ndash; the name of the key
+val
+{str} &ndash; the value associated with the key</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def setProperty(self, section, key, val):
+    &#34;&#34;&#34;Sets a new property within the given section.
+    
+    Arguments:
+        section {str} -- the name of the section
+        key     {str} -- the name of the key
+        val     {str} -- the value associated with the key
+    &#34;&#34;&#34;
+    section = section.lower()
+    key = key.lower()
+    val = val.lower()
+    if not section in self.data:
+        self.data[section] = {}
+    self.data[section][key] = val</code></pre>
+</details>
+</dd>
+<dt id="parser.ConfigData.toIniString"><code class="name flex">
+<span>def <span class="ident">toIniString</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Extracts a printable representation of the config data.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code> &ndash; <code>a</code> <code>string</code> <code>in</code> <code>the</code> <code>for</code> of <code>dict</code> of <code>dicts</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def toIniString(self):
+    &#34;&#34;&#34;Extracts a printable representation of the config data.
+    
+    Returns:
+        str -- a string in the for of dict of dicts
+    &#34;&#34;&#34;
+    return str(self.data)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="parser.Parser"><code class="flex name class">
+<span>class <span class="ident">Parser</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base for parser.</p>
+<p>parseOutput: The value to which the parse output will be stored</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Parser:
+    def __init__(self):
+        &#34;&#34;&#34;Base for parser.
+        
+        parseOutput: The value to which the parse output will be stored
+        &#34;&#34;&#34;
+        self.parseOutput = ConfigData()
+
+
+    def parse(self, string):
+        &#34;&#34;&#34;Parses the given string in the ini format.
+
+        Arguments:
+            string {str} -- a string representing the ini file in its format
+
+        Raises:
+            Exception -- if it reads a line which can&#39;t be processes (not a comment, key=value nor [section])
+
+        Returns:
+            ConfigData -- an object with the parsed data
+        &#34;&#34;&#34;
+        currentSection = &#34;&#34;
+        for line in string.split(&#39;\n&#39;):
+            line = line.strip()
+            if self.is_comment(line) or self.is_empty(line):
+                continue
+            elif self.is_keyval(line):
+                keyval = self.parseKey(line)
+                self.addEntry(currentSection, keyval[0], keyval[1])
+            elif self.is_section(line):
+                currentSection = line[1:-1]
+            else:
+                raise Exception(&#34;Can&#39;t process line {}&#34;.format(line))
+        return self.parseOutput
+
+
+    def is_keyval(self, line):
+        &#34;&#34;&#34;Checks whether the given line represents a key value pair.
+        
+        Arguments:
+            line {str} -- the line to be checked
+        
+        Returns:
+            bool -- true if the line is unindented, in the form key = value and the key doesn&#39;t contain the character ;
+        &#34;&#34;&#34;
+        pos = line.find(&#39;=&#39;);
+        return pos != -1 and line[0:pos].find(&#39;=&#39;) == -1 and line[0:pos].find(&#39;;&#39;) == -1
+
+
+    def is_section(self, line):
+        &#34;&#34;&#34;Checks whether the given line represents a section.
+
+        Arguments:
+            line {str} -- the line to be checked
+        
+        Returns:
+            bool -- true if the line is unindented, in the form [section] and section doesn&#39;t contain the character &#39;]&#39;
+        &#34;&#34;&#34;
+        return len(line) &gt; 2 and line[0] == &#39;[&#39; and line[-1] == &#39;]&#39; and line[1:-1].find(&#39;]&#39;) == -1
+
+
+    def is_comment(self, line):
+        &#34;&#34;&#34;Checks whether the given line represents a comment.
+
+        Arguments:
+            line {str} -- the line to be checked
+
+        Returns:
+            bool -- true if the line is unindented and starts with ; and #
+        &#34;&#34;&#34;
+
+        return len(line) &gt; 0 and (line[0] == &#39;;&#39; or line[0] == &#39;#&#39;)
+    def is_empty(self, line):
+        &#34;&#34;&#34;Checks whether the given line is empty.
+
+        Arguments:
+            line {str} -- the line to be checked
+
+        Returns:
+            bool -- true if the line is empty
+        &#34;&#34;&#34;
+        return len(line) == 0
+
+
+    def parseKey(self, line):
+        &#34;&#34;&#34;Parses the line and extracts the key and value from it.
+
+        Arguments:
+            line {str} -- the line to be parsed
+        
+        Returns:
+            list -- in the form [key, value]
+        &#34;&#34;&#34;
+        return list(map(lambda l : l.strip(), line.split(&#39;=&#39;, 1)))
+
+
+    def addEntry(self, section, key, val):
+        &#34;&#34;&#34;Adds the entry with the given specifications to the ConfiData object.
+        
+        section is empty when no section has been entered(i.e. it&#39;s a global property)
+
+        Arguments:
+            section {str} -- the name of the section
+            key     {str} -- the name of the key
+            val     {str} -- the value to be stored
+        &#34;&#34;&#34;
+        if section == &#34;&#34;: # global property
+            self.parseOutput.setGlobalProperty(key, val)
+        else:
+            self.parseOutput.setProperty(section, key, val)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="parser.Parser.addEntry"><code class="name flex">
+<span>def <span class="ident">addEntry</span></span>(<span>self, section, key, val)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Adds the entry with the given specifications to the ConfiData object.</p>
+<p>section is empty when no section has been entered(i.e. it's a global property)</p>
+<h2 id="arguments">Arguments</h2>
+<p>section {str} &ndash; the name of the section
+key
+{str} &ndash; the name of the key
+val
+{str} &ndash; the value to be stored</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def addEntry(self, section, key, val):
+    &#34;&#34;&#34;Adds the entry with the given specifications to the ConfiData object.
+    
+    section is empty when no section has been entered(i.e. it&#39;s a global property)
+
+    Arguments:
+        section {str} -- the name of the section
+        key     {str} -- the name of the key
+        val     {str} -- the value to be stored
+    &#34;&#34;&#34;
+    if section == &#34;&#34;: # global property
+        self.parseOutput.setGlobalProperty(key, val)
+    else:
+        self.parseOutput.setProperty(section, key, val)</code></pre>
+</details>
+</dd>
+<dt id="parser.Parser.is_comment"><code class="name flex">
+<span>def <span class="ident">is_comment</span></span>(<span>self, line)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Checks whether the given line represents a comment.</p>
+<h2 id="arguments">Arguments</h2>
+<p>line {str} &ndash; the line to be checked</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code> &ndash; <code>true</code> <code>if</code> <code>the</code> <code>line</code> <code>is</code> <code>unindented</code> <code>and</code> <code>starts</code> <code>with</code> ; <code>and</code> #</dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_comment(self, line):
+    &#34;&#34;&#34;Checks whether the given line represents a comment.
+
+    Arguments:
+        line {str} -- the line to be checked
+
+    Returns:
+        bool -- true if the line is unindented and starts with ; and #
+    &#34;&#34;&#34;
+
+    return len(line) &gt; 0 and (line[0] == &#39;;&#39; or line[0] == &#39;#&#39;)</code></pre>
+</details>
+</dd>
+<dt id="parser.Parser.is_empty"><code class="name flex">
+<span>def <span class="ident">is_empty</span></span>(<span>self, line)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Checks whether the given line is empty.</p>
+<h2 id="arguments">Arguments</h2>
+<p>line {str} &ndash; the line to be checked</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code> &ndash; <code>true</code> <code>if</code> <code>the</code> <code>line</code> <code>is</code> <code>empty</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_empty(self, line):
+    &#34;&#34;&#34;Checks whether the given line is empty.
+
+    Arguments:
+        line {str} -- the line to be checked
+
+    Returns:
+        bool -- true if the line is empty
+    &#34;&#34;&#34;
+    return len(line) == 0</code></pre>
+</details>
+</dd>
+<dt id="parser.Parser.is_keyval"><code class="name flex">
+<span>def <span class="ident">is_keyval</span></span>(<span>self, line)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Checks whether the given line represents a key value pair.</p>
+<h2 id="arguments">Arguments</h2>
+<p>line {str} &ndash; the line to be checked</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code> &ndash; <code>true</code> <code>if</code> <code>the</code> <code>line</code> <code>is</code> <code>unindented</code>, <code>in</code> <code>the</code> <code>form</code> <code>key</code> = <code>value</code> <code>and</code> <code>the</code> <code>key</code> <code>doesn't</code> <code>contain</code> <code>the</code> <code>character</code> ;</dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_keyval(self, line):
+    &#34;&#34;&#34;Checks whether the given line represents a key value pair.
+    
+    Arguments:
+        line {str} -- the line to be checked
+    
+    Returns:
+        bool -- true if the line is unindented, in the form key = value and the key doesn&#39;t contain the character ;
+    &#34;&#34;&#34;
+    pos = line.find(&#39;=&#39;);
+    return pos != -1 and line[0:pos].find(&#39;=&#39;) == -1 and line[0:pos].find(&#39;;&#39;) == -1</code></pre>
+</details>
+</dd>
+<dt id="parser.Parser.is_section"><code class="name flex">
+<span>def <span class="ident">is_section</span></span>(<span>self, line)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Checks whether the given line represents a section.</p>
+<h2 id="arguments">Arguments</h2>
+<p>line {str} &ndash; the line to be checked</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code> &ndash; <code>true</code> <code>if</code> <code>the</code> <code>line</code> <code>is</code> <code>unindented</code>, <code>in</code> <code>the</code> <code>form</code> [<code>section</code>] <code>and</code> <code>section</code> <code>doesn't</code> <code>contain</code> <code>the</code> <code>character</code> <code>'</code>]<code>'</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_section(self, line):
+    &#34;&#34;&#34;Checks whether the given line represents a section.
+
+    Arguments:
+        line {str} -- the line to be checked
+    
+    Returns:
+        bool -- true if the line is unindented, in the form [section] and section doesn&#39;t contain the character &#39;]&#39;
+    &#34;&#34;&#34;
+    return len(line) &gt; 2 and line[0] == &#39;[&#39; and line[-1] == &#39;]&#39; and line[1:-1].find(&#39;]&#39;) == -1</code></pre>
+</details>
+</dd>
+<dt id="parser.Parser.parse"><code class="name flex">
+<span>def <span class="ident">parse</span></span>(<span>self, string)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Parses the given string in the ini format.</p>
+<h2 id="arguments">Arguments</h2>
+<p>string {str} &ndash; a string representing the ini file in its format</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>Exception</code> &ndash; <code>if</code> <code>it</code> <code>reads</code> <code>a</code> <code>line</code> <code>which</code> <code>can't</code> <code>be</code> <code>processes</code> (<code>not</code> <code>a</code> <code>comment</code>, <code>key</code>=<code>value</code> <code>nor</code> [<code>section</code>])</dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><a title="parser.ConfigData" href="#parser.ConfigData"><code>ConfigData</code></a> &ndash; <code>an</code> <code>object</code> <code>with</code> <code>the</code> <code>parsed</code> <code>data</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def parse(self, string):
+    &#34;&#34;&#34;Parses the given string in the ini format.
+
+    Arguments:
+        string {str} -- a string representing the ini file in its format
+
+    Raises:
+        Exception -- if it reads a line which can&#39;t be processes (not a comment, key=value nor [section])
+
+    Returns:
+        ConfigData -- an object with the parsed data
+    &#34;&#34;&#34;
+    currentSection = &#34;&#34;
+    for line in string.split(&#39;\n&#39;):
+        line = line.strip()
+        if self.is_comment(line) or self.is_empty(line):
+            continue
+        elif self.is_keyval(line):
+            keyval = self.parseKey(line)
+            self.addEntry(currentSection, keyval[0], keyval[1])
+        elif self.is_section(line):
+            currentSection = line[1:-1]
+        else:
+            raise Exception(&#34;Can&#39;t process line {}&#34;.format(line))
+    return self.parseOutput</code></pre>
+</details>
+</dd>
+<dt id="parser.Parser.parseKey"><code class="name flex">
+<span>def <span class="ident">parseKey</span></span>(<span>self, line)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Parses the line and extracts the key and value from it.</p>
+<h2 id="arguments">Arguments</h2>
+<p>line {str} &ndash; the line to be parsed</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code> &ndash; <code>in</code> <code>the</code> <code>form</code> [<code>key</code>, <code>value</code>]</dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def parseKey(self, line):
+    &#34;&#34;&#34;Parses the line and extracts the key and value from it.
+
+    Arguments:
+        line {str} -- the line to be parsed
+    
+    Returns:
+        list -- in the form [key, value]
+    &#34;&#34;&#34;
+    return list(map(lambda l : l.strip(), line.split(&#39;=&#39;, 1)))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="parser.parseIni" href="#parser.parseIni">parseIni</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="parser.ConfigData" href="#parser.ConfigData">ConfigData</a></code></h4>
+<ul class="two-column">
+<li><code><a title="parser.ConfigData.deleteProperty" href="#parser.ConfigData.deleteProperty">deleteProperty</a></code></li>
+<li><code><a title="parser.ConfigData.getGlobalProperty" href="#parser.ConfigData.getGlobalProperty">getGlobalProperty</a></code></li>
+<li><code><a title="parser.ConfigData.getProperty" href="#parser.ConfigData.getProperty">getProperty</a></code></li>
+<li><code><a title="parser.ConfigData.getSection" href="#parser.ConfigData.getSection">getSection</a></code></li>
+<li><code><a title="parser.ConfigData.hasProperty" href="#parser.ConfigData.hasProperty">hasProperty</a></code></li>
+<li><code><a title="parser.ConfigData.hasSection" href="#parser.ConfigData.hasSection">hasSection</a></code></li>
+<li><code><a title="parser.ConfigData.sectionsCount" href="#parser.ConfigData.sectionsCount">sectionsCount</a></code></li>
+<li><code><a title="parser.ConfigData.setGlobalProperty" href="#parser.ConfigData.setGlobalProperty">setGlobalProperty</a></code></li>
+<li><code><a title="parser.ConfigData.setProperty" href="#parser.ConfigData.setProperty">setProperty</a></code></li>
+<li><code><a title="parser.ConfigData.toIniString" href="#parser.ConfigData.toIniString">toIniString</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="parser.Parser" href="#parser.Parser">Parser</a></code></h4>
+<ul class="two-column">
+<li><code><a title="parser.Parser.addEntry" href="#parser.Parser.addEntry">addEntry</a></code></li>
+<li><code><a title="parser.Parser.is_comment" href="#parser.Parser.is_comment">is_comment</a></code></li>
+<li><code><a title="parser.Parser.is_empty" href="#parser.Parser.is_empty">is_empty</a></code></li>
+<li><code><a title="parser.Parser.is_keyval" href="#parser.Parser.is_keyval">is_keyval</a></code></li>
+<li><code><a title="parser.Parser.is_section" href="#parser.Parser.is_section">is_section</a></code></li>
+<li><code><a title="parser.Parser.parse" href="#parser.Parser.parse">parse</a></code></li>
+<li><code><a title="parser.Parser.parseKey" href="#parser.Parser.parseKey">parseKey</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
