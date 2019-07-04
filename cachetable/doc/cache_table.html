@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.2" />
-<title>cachetable.cache_table API documentation</title>
+<title>cache_table API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>cachetable.cache_table</code></h1>
+<h1 class="title">Module <code>cache_table</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -32,6 +32,7 @@ class EntryTime:
 
         Arguments:
             key {object} -- the key
+
             insertion_time -- the time it was inserted in in milliseconds
         &#34;&#34;&#34;
         self.key = key
@@ -44,12 +45,16 @@ class CacheTable(MutableMapping):
         Arguments:
             ttl -- time to live for the keys in milliseconds
         
-        data          {dict}  -- The dict of the stored data
-        insertedTimes {deque} -- deque of EntryTime maintained in sorted order
+        data              {dict}  -- The dict of the stored data
+        
+        insertedTimes     {deque} -- deque of EntryTime maintained in sorted order
+        
+        insertedTimesDict {dict}  -- Entrytime for each key (for fast access)
         &#34;&#34;&#34;
         self.ttl = ttl
         self.data = {}
         self.insertedTimes = deque()
+        self.insertedTimesDict = {}
     def __getitem__(self, key):
         &#34;&#34;&#34;Gets the value of the key
 
@@ -67,8 +72,10 @@ class CacheTable(MutableMapping):
     def __setitem__(self, key, val):
         self.remove_expired()
         self.data[key] = val
-        self.insertedTimes.appendleft(EntryTime(key, self.get_time()))
+        self.insertedTimes.append(EntryTime(key, self.get_time()))
+        self.insertedTimesDict[key] = self.get_time()
     def __delitem__(self, key):
+        del self.insertedTimesDict[key]
         del self.data[key]
     def __len__(self):
         self.remove_expired()
@@ -82,8 +89,12 @@ class CacheTable(MutableMapping):
     def remove_expired(self):
         &#34;&#34;&#34;Removes the expired key from the table and unmark their insertion time&#34;&#34;&#34;
         while len(self.insertedTimes) != 0 and self.is_expired(self.insertedTimes[0]):
-                del self.data[self.insertedTimes[0].key]
-                self.insertedTimes.popleft()
+            key = self.insertedTimes[0].key
+            if self.insertedTimesDict[key] == self.insertedTimes[0].insertion_time:
+                del self.data[key]
+                del self.insertedTimesDict[key]
+            self.insertedTimes.popleft()
+
     def is_expired(self, entry):
         &#34;&#34;&#34;Checks whether a key is expired
 
@@ -115,7 +126,7 @@ if __name__ == &#34;__main__&#34;:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="cachetable.cache_table.CacheTable"><code class="flex name class">
+<dt id="cache_table.CacheTable"><code class="flex name class">
 <span>class <span class="ident">CacheTable</span></span>
 <span>(</span><span>ttl)</span>
 </code></dt>
@@ -126,8 +137,11 @@ if __name__ == &#34;__main__&#34;:
 <p>ttl &ndash; time to live for the keys in milliseconds
 data
 {dict}
-&ndash; The dict of the stored data
-insertedTimes {deque} &ndash; deque of EntryTime maintained in sorted order</p></section>
+&ndash; The dict of the stored data</p>
+<p>insertedTimes
+{deque} &ndash; deque of EntryTime maintained in sorted order</p>
+<p>insertedTimesDict {dict}
+&ndash; Entrytime for each key (for fast access)</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class CacheTable(MutableMapping): 
@@ -138,12 +152,16 @@ insertedTimes {deque} &ndash; deque of EntryTime maintained in sorted order</p><
         Arguments:
             ttl -- time to live for the keys in milliseconds
         
-        data          {dict}  -- The dict of the stored data
-        insertedTimes {deque} -- deque of EntryTime maintained in sorted order
+        data              {dict}  -- The dict of the stored data
+        
+        insertedTimes     {deque} -- deque of EntryTime maintained in sorted order
+        
+        insertedTimesDict {dict}  -- Entrytime for each key (for fast access)
         &#34;&#34;&#34;
         self.ttl = ttl
         self.data = {}
         self.insertedTimes = deque()
+        self.insertedTimesDict = {}
     def __getitem__(self, key):
         &#34;&#34;&#34;Gets the value of the key
 
@@ -161,8 +179,10 @@ insertedTimes {deque} &ndash; deque of EntryTime maintained in sorted order</p><
     def __setitem__(self, key, val):
         self.remove_expired()
         self.data[key] = val
-        self.insertedTimes.appendleft(EntryTime(key, self.get_time()))
+        self.insertedTimes.append(EntryTime(key, self.get_time()))
+        self.insertedTimesDict[key] = self.get_time()
     def __delitem__(self, key):
+        del self.insertedTimesDict[key]
         del self.data[key]
     def __len__(self):
         self.remove_expired()
@@ -176,8 +196,12 @@ insertedTimes {deque} &ndash; deque of EntryTime maintained in sorted order</p><
     def remove_expired(self):
         &#34;&#34;&#34;Removes the expired key from the table and unmark their insertion time&#34;&#34;&#34;
         while len(self.insertedTimes) != 0 and self.is_expired(self.insertedTimes[0]):
-                del self.data[self.insertedTimes[0].key]
-                self.insertedTimes.popleft()
+            key = self.insertedTimes[0].key
+            if self.insertedTimesDict[key] == self.insertedTimes[0].insertion_time:
+                del self.data[key]
+                del self.insertedTimesDict[key]
+            self.insertedTimes.popleft()
+
     def is_expired(self, entry):
         &#34;&#34;&#34;Checks whether a key is expired
 
@@ -200,7 +224,7 @@ insertedTimes {deque} &ndash; deque of EntryTime maintained in sorted order</p><
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="cachetable.cache_table.CacheTable.get_time"><code class="name flex">
+<dt id="cache_table.CacheTable.get_time"><code class="name flex">
 <span>def <span class="ident">get_time</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -212,7 +236,7 @@ insertedTimes {deque} &ndash; deque of EntryTime maintained in sorted order</p><
     return int(round(time.time() * 1000))</code></pre>
 </details>
 </dd>
-<dt id="cachetable.cache_table.CacheTable.is_expired"><code class="name flex">
+<dt id="cache_table.CacheTable.is_expired"><code class="name flex">
 <span>def <span class="ident">is_expired</span></span>(<span>self, entry)</span>
 </code></dt>
 <dd>
@@ -238,7 +262,7 @@ insertedTimes {deque} &ndash; deque of EntryTime maintained in sorted order</p><
     return self.get_time() - entry.insertion_time &gt; self.ttl</code></pre>
 </details>
 </dd>
-<dt id="cachetable.cache_table.CacheTable.remove_expired"><code class="name flex">
+<dt id="cache_table.CacheTable.remove_expired"><code class="name flex">
 <span>def <span class="ident">remove_expired</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -248,13 +272,16 @@ insertedTimes {deque} &ndash; deque of EntryTime maintained in sorted order</p><
 <pre><code class="python">def remove_expired(self):
     &#34;&#34;&#34;Removes the expired key from the table and unmark their insertion time&#34;&#34;&#34;
     while len(self.insertedTimes) != 0 and self.is_expired(self.insertedTimes[0]):
-            del self.data[self.insertedTimes[0].key]
-            self.insertedTimes.popleft()</code></pre>
+        key = self.insertedTimes[0].key
+        if self.insertedTimesDict[key] == self.insertedTimes[0].insertion_time:
+            del self.data[key]
+            del self.insertedTimesDict[key]
+        self.insertedTimes.popleft()</code></pre>
 </details>
 </dd>
 </dl>
 </dd>
-<dt id="cachetable.cache_table.EntryTime"><code class="flex name class">
+<dt id="cache_table.EntryTime"><code class="flex name class">
 <span>class <span class="ident">EntryTime</span></span>
 <span>(</span><span>key, insertion_time)</span>
 </code></dt>
@@ -262,8 +289,8 @@ insertedTimes {deque} &ndash; deque of EntryTime maintained in sorted order</p><
 <section class="desc"><p>A class to store the entry time of the key along with the key</p>
 <p>Base of EntryTime</p>
 <h2 id="arguments">Arguments</h2>
-<p>key {object} &ndash; the key
-insertion_time &ndash; the time it was inserted in in milliseconds</p></section>
+<p>key {object} &ndash; the key</p>
+<p>insertion_time &ndash; the time it was inserted in in milliseconds</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class EntryTime:
@@ -273,6 +300,7 @@ insertion_time &ndash; the time it was inserted in in milliseconds</p></section>
 
         Arguments:
             key {object} -- the key
+
             insertion_time -- the time it was inserted in in milliseconds
         &#34;&#34;&#34;
         self.key = key
@@ -288,23 +316,18 @@ insertion_time &ndash; the time it was inserted in in milliseconds</p></section>
 <ul></ul>
 </div>
 <ul id="index">
-<li><h3>Super-module</h3>
-<ul>
-<li><code><a title="cachetable" href="index.html">cachetable</a></code></li>
-</ul>
-</li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="cachetable.cache_table.CacheTable" href="#cachetable.cache_table.CacheTable">CacheTable</a></code></h4>
+<h4><code><a title="cache_table.CacheTable" href="#cache_table.CacheTable">CacheTable</a></code></h4>
 <ul class="">
-<li><code><a title="cachetable.cache_table.CacheTable.get_time" href="#cachetable.cache_table.CacheTable.get_time">get_time</a></code></li>
-<li><code><a title="cachetable.cache_table.CacheTable.is_expired" href="#cachetable.cache_table.CacheTable.is_expired">is_expired</a></code></li>
-<li><code><a title="cachetable.cache_table.CacheTable.remove_expired" href="#cachetable.cache_table.CacheTable.remove_expired">remove_expired</a></code></li>
+<li><code><a title="cache_table.CacheTable.get_time" href="#cache_table.CacheTable.get_time">get_time</a></code></li>
+<li><code><a title="cache_table.CacheTable.is_expired" href="#cache_table.CacheTable.is_expired">is_expired</a></code></li>
+<li><code><a title="cache_table.CacheTable.remove_expired" href="#cache_table.CacheTable.remove_expired">remove_expired</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="cachetable.cache_table.EntryTime" href="#cachetable.cache_table.EntryTime">EntryTime</a></code></h4>
+<h4><code><a title="cache_table.EntryTime" href="#cache_table.EntryTime">EntryTime</a></code></h4>
 </li>
 </ul>
 </li>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.2" />
-<title>cachetable.cache_table_per_entry API documentation</title>
+<title>cache_table_per_entry API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>cachetable.cache_table_per_entry</code></h1>
+<h1 class="title">Module <code>cache_table_per_entry</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -30,6 +30,7 @@ class CacheTablePerEntry:
         &#34;&#34;&#34;Base for CacheTablePerEntry
         
         data        {dict} -- the dictionary in which the table is stored
+        
         removalTime {dict} -- the dictionary which marks the expiration time for each key
         &#34;&#34;&#34;
         self.data = {}
@@ -55,7 +56,9 @@ class CacheTablePerEntry:
 
         Arguments:
             key {object} -- the name of the key
+        
             val {object} -- the value associated with the key
+            
             ttl {int}    -- time to live in milliseconds
 
         &#34;&#34;&#34;
@@ -129,15 +132,15 @@ if __name__ == &#34;__main__&#34;:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="cachetable.cache_table_per_entry.CacheTablePerEntry"><code class="flex name class">
+<dt id="cache_table_per_entry.CacheTablePerEntry"><code class="flex name class">
 <span>class <span class="ident">CacheTablePerEntry</span></span>
 </code></dt>
 <dd>
 <section class="desc"><p>This is a cache table which is a dict with diffrent expiration time for each key</p>
 <p>Base for CacheTablePerEntry</p>
 <p>data
-{dict} &ndash; the dictionary in which the table is stored
-removalTime {dict} &ndash; the dictionary which marks the expiration time for each key</p></section>
+{dict} &ndash; the dictionary in which the table is stored</p>
+<p>removalTime {dict} &ndash; the dictionary which marks the expiration time for each key</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class CacheTablePerEntry:
@@ -146,6 +149,7 @@ removalTime {dict} &ndash; the dictionary which marks the expiration time for ea
         &#34;&#34;&#34;Base for CacheTablePerEntry
         
         data        {dict} -- the dictionary in which the table is stored
+        
         removalTime {dict} -- the dictionary which marks the expiration time for each key
         &#34;&#34;&#34;
         self.data = {}
@@ -171,7 +175,9 @@ removalTime {dict} &ndash; the dictionary which marks the expiration time for ea
 
         Arguments:
             key {object} -- the name of the key
+        
             val {object} -- the value associated with the key
+            
             ttl {int}    -- time to live in milliseconds
 
         &#34;&#34;&#34;
@@ -227,7 +233,7 @@ removalTime {dict} &ndash; the dictionary which marks the expiration time for ea
 </details>
 <h3>Methods</h3>
 <dl>
-<dt id="cachetable.cache_table_per_entry.CacheTablePerEntry.exists"><code class="name flex">
+<dt id="cache_table_per_entry.CacheTablePerEntry.exists"><code class="name flex">
 <span>def <span class="ident">exists</span></span>(<span>self, key)</span>
 </code></dt>
 <dd>
@@ -254,7 +260,7 @@ removalTime {dict} &ndash; the dictionary which marks the expiration time for ea
     return key in self.data</code></pre>
 </details>
 </dd>
-<dt id="cachetable.cache_table_per_entry.CacheTablePerEntry.get"><code class="name flex">
+<dt id="cache_table_per_entry.CacheTablePerEntry.get"><code class="name flex">
 <span>def <span class="ident">get</span></span>(<span>self, key)</span>
 </code></dt>
 <dd>
@@ -289,7 +295,7 @@ removalTime {dict} &ndash; the dictionary which marks the expiration time for ea
     return self.data[key]</code></pre>
 </details>
 </dd>
-<dt id="cachetable.cache_table_per_entry.CacheTablePerEntry.get_time"><code class="name flex">
+<dt id="cache_table_per_entry.CacheTablePerEntry.get_time"><code class="name flex">
 <span>def <span class="ident">get_time</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -310,7 +316,7 @@ removalTime {dict} &ndash; the dictionary which marks the expiration time for ea
     return int(round(time.time() * 1000))</code></pre>
 </details>
 </dd>
-<dt id="cachetable.cache_table_per_entry.CacheTablePerEntry.is_expired"><code class="name flex">
+<dt id="cache_table_per_entry.CacheTablePerEntry.is_expired"><code class="name flex">
 <span>def <span class="ident">is_expired</span></span>(<span>self, key)</span>
 </code></dt>
 <dd>
@@ -336,7 +342,7 @@ removalTime {dict} &ndash; the dictionary which marks the expiration time for ea
     return self.get_time() &gt; self.removalTime[key]</code></pre>
 </details>
 </dd>
-<dt id="cachetable.cache_table_per_entry.CacheTablePerEntry.remove_expired"><code class="name flex">
+<dt id="cache_table_per_entry.CacheTablePerEntry.remove_expired"><code class="name flex">
 <span>def <span class="ident">remove_expired</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -350,7 +356,7 @@ removalTime {dict} &ndash; the dictionary which marks the expiration time for ea
             self.remove_key(key)</code></pre>
 </details>
 </dd>
-<dt id="cachetable.cache_table_per_entry.CacheTablePerEntry.remove_key"><code class="name flex">
+<dt id="cache_table_per_entry.CacheTablePerEntry.remove_key"><code class="name flex">
 <span>def <span class="ident">remove_key</span></span>(<span>self, key)</span>
 </code></dt>
 <dd>
@@ -369,15 +375,15 @@ removalTime {dict} &ndash; the dictionary which marks the expiration time for ea
     del self.removalTime[key]</code></pre>
 </details>
 </dd>
-<dt id="cachetable.cache_table_per_entry.CacheTablePerEntry.set"><code class="name flex">
+<dt id="cache_table_per_entry.CacheTablePerEntry.set"><code class="name flex">
 <span>def <span class="ident">set</span></span>(<span>self, key, val, ttl)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Adds or override the key with the given val to expire in ttl milliseconds</p>
 <h2 id="arguments">Arguments</h2>
-<p>key {object} &ndash; the name of the key
-val {object} &ndash; the value associated with the key
-ttl {int}
+<p>key {object} &ndash; the name of the key</p>
+<p>val {object} &ndash; the value associated with the key</p>
+<p>ttl {int}
 &ndash; time to live in milliseconds</p></section>
 <details class="source">
 <summary>Source code</summary>
@@ -386,7 +392,9 @@ ttl {int}
 
     Arguments:
         key {object} -- the name of the key
+    
         val {object} -- the value associated with the key
+        
         ttl {int}    -- time to live in milliseconds
 
     &#34;&#34;&#34;
@@ -406,23 +414,18 @@ ttl {int}
 <ul></ul>
 </div>
 <ul id="index">
-<li><h3>Super-module</h3>
-<ul>
-<li><code><a title="cachetable" href="index.html">cachetable</a></code></li>
-</ul>
-</li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="cachetable.cache_table_per_entry.CacheTablePerEntry" href="#cachetable.cache_table_per_entry.CacheTablePerEntry">CacheTablePerEntry</a></code></h4>
+<h4><code><a title="cache_table_per_entry.CacheTablePerEntry" href="#cache_table_per_entry.CacheTablePerEntry">CacheTablePerEntry</a></code></h4>
 <ul class="two-column">
-<li><code><a title="cachetable.cache_table_per_entry.CacheTablePerEntry.exists" href="#cachetable.cache_table_per_entry.CacheTablePerEntry.exists">exists</a></code></li>
-<li><code><a title="cachetable.cache_table_per_entry.CacheTablePerEntry.get" href="#cachetable.cache_table_per_entry.CacheTablePerEntry.get">get</a></code></li>
-<li><code><a title="cachetable.cache_table_per_entry.CacheTablePerEntry.get_time" href="#cachetable.cache_table_per_entry.CacheTablePerEntry.get_time">get_time</a></code></li>
-<li><code><a title="cachetable.cache_table_per_entry.CacheTablePerEntry.is_expired" href="#cachetable.cache_table_per_entry.CacheTablePerEntry.is_expired">is_expired</a></code></li>
-<li><code><a title="cachetable.cache_table_per_entry.CacheTablePerEntry.remove_expired" href="#cachetable.cache_table_per_entry.CacheTablePerEntry.remove_expired">remove_expired</a></code></li>
-<li><code><a title="cachetable.cache_table_per_entry.CacheTablePerEntry.remove_key" href="#cachetable.cache_table_per_entry.CacheTablePerEntry.remove_key">remove_key</a></code></li>
-<li><code><a title="cachetable.cache_table_per_entry.CacheTablePerEntry.set" href="#cachetable.cache_table_per_entry.CacheTablePerEntry.set">set</a></code></li>
+<li><code><a title="cache_table_per_entry.CacheTablePerEntry.exists" href="#cache_table_per_entry.CacheTablePerEntry.exists">exists</a></code></li>
+<li><code><a title="cache_table_per_entry.CacheTablePerEntry.get" href="#cache_table_per_entry.CacheTablePerEntry.get">get</a></code></li>
+<li><code><a title="cache_table_per_entry.CacheTablePerEntry.get_time" href="#cache_table_per_entry.CacheTablePerEntry.get_time">get_time</a></code></li>
+<li><code><a title="cache_table_per_entry.CacheTablePerEntry.is_expired" href="#cache_table_per_entry.CacheTablePerEntry.is_expired">is_expired</a></code></li>
+<li><code><a title="cache_table_per_entry.CacheTablePerEntry.remove_expired" href="#cache_table_per_entry.CacheTablePerEntry.remove_expired">remove_expired</a></code></li>
+<li><code><a title="cache_table_per_entry.CacheTablePerEntry.remove_key" href="#cache_table_per_entry.CacheTablePerEntry.remove_key">remove_key</a></code></li>
+<li><code><a title="cache_table_per_entry.CacheTablePerEntry.set" href="#cache_table_per_entry.CacheTablePerEntry.set">set</a></code></li>
 </ul>
 </li>
 </ul>
