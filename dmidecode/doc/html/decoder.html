@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.2" />
+<title>decoder API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>decoder</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">import json
+class Section:
+    def __init__(self, handle, typ, size):
+        self.handle = handle
+        self.typ = typ
+        self.size = size
+        self.data = {}
+    def set_property(self, key, val):
+        &#34;&#34;&#34;Adds a property to the current section.
+
+        Arguments:
+            key {str} -- the name of the key
+            val {str} -- the value associated with the key
+        &#34;&#34;&#34;
+        self.data[key] = val
+    def get_property(self, key):
+        &#34;&#34;&#34;Gets the value associated with the key.
+
+        Arguments:
+            key {str} -- the string representing the key
+
+        Raises:
+            KeyError -- if the key doesn&#39;t exist
+
+        Returns:
+            str -- the value of the key
+        &#34;&#34;&#34;
+        return self.data[key]
+
+class DMIParser:
+    def count_tabs(self, string):
+        &#34;&#34;&#34;Counts the number of the tabs in the beginning of the passed string.
+
+        Arguments:
+            string {str} -- the string to be processed
+
+        Returns:
+            int -- the number of the tabs
+        &#34;&#34;&#34;
+        i = 0
+        while i &lt; len(string) and string[i] == &#39;\t&#39;:
+            i = i + 1
+        return i
+        
+    def parse_handle(self, handle):
+        &#34;&#34;&#34;Parses the line preceding each section which contains the handle, the type and the size.
+        
+        Assumption:
+            The handle is in the form &#34;Handle {handle}, DMI type {type}, {size} bytes&#34;
+
+        Arguments:
+            handle {str} -- the string representing the handle
+
+        Returns:
+            list -- The parsed data in the form [handle, type, size]
+        &#34;&#34;&#34;
+        return [x.strip() for x in handle.replace(&#39;Handle&#39;, &#39;&#39;).replace(&#39;DMI type&#39;, &#39;&#39;).replace(&#39;bytes&#39;, &#39;&#39;).split(&#39;, &#39;)]
+
+    def parse_dmi(self, string):
+        &#34;&#34;&#34;Parses the string which should be a result of the running the command dmidecode
+
+        Assumptions:
+            The string is formatted in the given way:
+                
+                The first few lines are a description that is ignored.
+               
+                The beginning of the data part is preceded by the first blank lines in the string.
+               
+                Each section starts with an unindented line which contains the handle, type and size.
+                
+                The second line of the section is unindented and represents the name of the section
+                
+                The rest of the section is in the form: &#34;key: val&#34;
+                
+                The line containing the key is indented by 1 tab.
+                
+                val mught span multiple lines but the indentation of those lines (except the one containing key) is 2 tabs
+                
+                The sections is separated by a blank line
+        Returns:
+            dict -- dictionary of sections contained in the string
+        &#34;&#34;&#34;
+        DMIData = {}
+        last_open_section = &#34;&#34;
+        variable_data = &#34;&#34;
+        variable_name = &#34;&#34;
+        data_start = string.find(&#39;\n\n&#39;) + 2
+        for line in string[data_start:].split(&#39;\n&#39;):
+            tabs_count = self.count_tabs(line)
+            
+            if variable_name != &#34;&#34; and tabs_count != 2:
+                DMIData[last_open_section].set_property(variable_name, variable_data.strip())
+                variable_name = variable_data = &#34;&#34;
+            if len(line) == 0:
+                continue
+            elif len(line) &gt; 6 and line[0:6] == &#34;Handle&#34;:
+              handle_data = self.parse_handle(line)
+            elif tabs_count == 0:
+                DMIData[line] = Section(handle_data[0], handle_data[1], handle_data[2])
+                last_open_section = line
+            elif tabs_count == 1:
+                splitted = line.split(&#39;:&#39;)
+                variable_name = splitted[0].strip()
+                variable_data = splitted[1].strip() + &#34;\n&#34;
+            else:
+                variable_data += line[2:] + &#34;\n&#34;
+        if variable_name != &#34;&#34;:
+            DMIData[last_open_section].set_property(variable_name, variable_data.strip())
+        return DMIData
+
+if __name__ == &#34;__main__&#34;:
+    data = open(&#34;data.txt&#34;, &#34;r&#34;).read()
+    parsed = DMIParser().parse_dmi(data)
+    print(json.dumps(parsed, default=lambda o: o.__dict__, indent=2))</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="decoder.DMIParser"><code class="flex name class">
+<span>class <span class="ident">DMIParser</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DMIParser:
+    def count_tabs(self, string):
+        &#34;&#34;&#34;Counts the number of the tabs in the beginning of the passed string.
+
+        Arguments:
+            string {str} -- the string to be processed
+
+        Returns:
+            int -- the number of the tabs
+        &#34;&#34;&#34;
+        i = 0
+        while i &lt; len(string) and string[i] == &#39;\t&#39;:
+            i = i + 1
+        return i
+        
+    def parse_handle(self, handle):
+        &#34;&#34;&#34;Parses the line preceding each section which contains the handle, the type and the size.
+        
+        Assumption:
+            The handle is in the form &#34;Handle {handle}, DMI type {type}, {size} bytes&#34;
+
+        Arguments:
+            handle {str} -- the string representing the handle
+
+        Returns:
+            list -- The parsed data in the form [handle, type, size]
+        &#34;&#34;&#34;
+        return [x.strip() for x in handle.replace(&#39;Handle&#39;, &#39;&#39;).replace(&#39;DMI type&#39;, &#39;&#39;).replace(&#39;bytes&#39;, &#39;&#39;).split(&#39;, &#39;)]
+
+    def parse_dmi(self, string):
+        &#34;&#34;&#34;Parses the string which should be a result of the running the command dmidecode
+
+        Assumptions:
+            The string is formatted in the given way:
+                
+                The first few lines are a description that is ignored.
+               
+                The beginning of the data part is preceded by the first blank lines in the string.
+               
+                Each section starts with an unindented line which contains the handle, type and size.
+                
+                The second line of the section is unindented and represents the name of the section
+                
+                The rest of the section is in the form: &#34;key: val&#34;
+                
+                The line containing the key is indented by 1 tab.
+                
+                val mught span multiple lines but the indentation of those lines (except the one containing key) is 2 tabs
+                
+                The sections is separated by a blank line
+        Returns:
+            dict -- dictionary of sections contained in the string
+        &#34;&#34;&#34;
+        DMIData = {}
+        last_open_section = &#34;&#34;
+        variable_data = &#34;&#34;
+        variable_name = &#34;&#34;
+        data_start = string.find(&#39;\n\n&#39;) + 2
+        for line in string[data_start:].split(&#39;\n&#39;):
+            tabs_count = self.count_tabs(line)
+            
+            if variable_name != &#34;&#34; and tabs_count != 2:
+                DMIData[last_open_section].set_property(variable_name, variable_data.strip())
+                variable_name = variable_data = &#34;&#34;
+            if len(line) == 0:
+                continue
+            elif len(line) &gt; 6 and line[0:6] == &#34;Handle&#34;:
+              handle_data = self.parse_handle(line)
+            elif tabs_count == 0:
+                DMIData[line] = Section(handle_data[0], handle_data[1], handle_data[2])
+                last_open_section = line
+            elif tabs_count == 1:
+                splitted = line.split(&#39;:&#39;)
+                variable_name = splitted[0].strip()
+                variable_data = splitted[1].strip() + &#34;\n&#34;
+            else:
+                variable_data += line[2:] + &#34;\n&#34;
+        if variable_name != &#34;&#34;:
+            DMIData[last_open_section].set_property(variable_name, variable_data.strip())
+        return DMIData</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="decoder.DMIParser.count_tabs"><code class="name flex">
+<span>def <span class="ident">count_tabs</span></span>(<span>self, string)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Counts the number of the tabs in the beginning of the passed string.</p>
+<h2 id="arguments">Arguments</h2>
+<p>string {str} &ndash; the string to be processed</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>int</code> &ndash; <code>the</code> <code>number</code> of <code>the</code> <code>tabs</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def count_tabs(self, string):
+    &#34;&#34;&#34;Counts the number of the tabs in the beginning of the passed string.
+
+    Arguments:
+        string {str} -- the string to be processed
+
+    Returns:
+        int -- the number of the tabs
+    &#34;&#34;&#34;
+    i = 0
+    while i &lt; len(string) and string[i] == &#39;\t&#39;:
+        i = i + 1
+    return i</code></pre>
+</details>
+</dd>
+<dt id="decoder.DMIParser.parse_dmi"><code class="name flex">
+<span>def <span class="ident">parse_dmi</span></span>(<span>self, string)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Parses the string which should be a result of the running the command dmidecode</p>
+<h2 id="assumptions">Assumptions</h2>
+<p>The string is formatted in the given way:</p>
+<pre><code>The first few lines are a description that is ignored.
+
+The beginning of the data part is preceded by the first blank lines in the string.
+
+Each section starts with an unindented line which contains the handle, type and size.
+
+The second line of the section is unindented and represents the name of the section
+
+The rest of the section is in the form: "key: val"
+
+The line containing the key is indented by 1 tab.
+
+val mught span multiple lines but the indentation of those lines (except the one containing key) is 2 tabs
+
+The sections is separated by a blank line
+</code></pre>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code> &ndash; <code>dictionary</code> of <code>sections</code> <code>contained</code> <code>in</code> <code>the</code> <code>string</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def parse_dmi(self, string):
+    &#34;&#34;&#34;Parses the string which should be a result of the running the command dmidecode
+
+    Assumptions:
+        The string is formatted in the given way:
+            
+            The first few lines are a description that is ignored.
+           
+            The beginning of the data part is preceded by the first blank lines in the string.
+           
+            Each section starts with an unindented line which contains the handle, type and size.
+            
+            The second line of the section is unindented and represents the name of the section
+            
+            The rest of the section is in the form: &#34;key: val&#34;
+            
+            The line containing the key is indented by 1 tab.
+            
+            val mught span multiple lines but the indentation of those lines (except the one containing key) is 2 tabs
+            
+            The sections is separated by a blank line
+    Returns:
+        dict -- dictionary of sections contained in the string
+    &#34;&#34;&#34;
+    DMIData = {}
+    last_open_section = &#34;&#34;
+    variable_data = &#34;&#34;
+    variable_name = &#34;&#34;
+    data_start = string.find(&#39;\n\n&#39;) + 2
+    for line in string[data_start:].split(&#39;\n&#39;):
+        tabs_count = self.count_tabs(line)
+        
+        if variable_name != &#34;&#34; and tabs_count != 2:
+            DMIData[last_open_section].set_property(variable_name, variable_data.strip())
+            variable_name = variable_data = &#34;&#34;
+        if len(line) == 0:
+            continue
+        elif len(line) &gt; 6 and line[0:6] == &#34;Handle&#34;:
+          handle_data = self.parse_handle(line)
+        elif tabs_count == 0:
+            DMIData[line] = Section(handle_data[0], handle_data[1], handle_data[2])
+            last_open_section = line
+        elif tabs_count == 1:
+            splitted = line.split(&#39;:&#39;)
+            variable_name = splitted[0].strip()
+            variable_data = splitted[1].strip() + &#34;\n&#34;
+        else:
+            variable_data += line[2:] + &#34;\n&#34;
+    if variable_name != &#34;&#34;:
+        DMIData[last_open_section].set_property(variable_name, variable_data.strip())
+    return DMIData</code></pre>
+</details>
+</dd>
+<dt id="decoder.DMIParser.parse_handle"><code class="name flex">
+<span>def <span class="ident">parse_handle</span></span>(<span>self, handle)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Parses the line preceding each section which contains the handle, the type and the size.</p>
+<h2 id="assumption">Assumption</h2>
+<p>The handle is in the form "Handle {handle}, DMI type {type}, {size} bytes"</p>
+<h2 id="arguments">Arguments</h2>
+<p>handle {str} &ndash; the string representing the handle</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code> &ndash; <code>The</code> <code>parsed</code> <code>data</code> <code>in</code> <code>the</code> <code>form</code> [<code>handle</code>, <code>type</code>, <code>size</code>]</dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def parse_handle(self, handle):
+    &#34;&#34;&#34;Parses the line preceding each section which contains the handle, the type and the size.
+    
+    Assumption:
+        The handle is in the form &#34;Handle {handle}, DMI type {type}, {size} bytes&#34;
+
+    Arguments:
+        handle {str} -- the string representing the handle
+
+    Returns:
+        list -- The parsed data in the form [handle, type, size]
+    &#34;&#34;&#34;
+    return [x.strip() for x in handle.replace(&#39;Handle&#39;, &#39;&#39;).replace(&#39;DMI type&#39;, &#39;&#39;).replace(&#39;bytes&#39;, &#39;&#39;).split(&#39;, &#39;)]</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="decoder.Section"><code class="flex name class">
+<span>class <span class="ident">Section</span></span>
+<span>(</span><span>handle, typ, size)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Section:
+    def __init__(self, handle, typ, size):
+        self.handle = handle
+        self.typ = typ
+        self.size = size
+        self.data = {}
+    def set_property(self, key, val):
+        &#34;&#34;&#34;Adds a property to the current section.
+
+        Arguments:
+            key {str} -- the name of the key
+            val {str} -- the value associated with the key
+        &#34;&#34;&#34;
+        self.data[key] = val
+    def get_property(self, key):
+        &#34;&#34;&#34;Gets the value associated with the key.
+
+        Arguments:
+            key {str} -- the string representing the key
+
+        Raises:
+            KeyError -- if the key doesn&#39;t exist
+
+        Returns:
+            str -- the value of the key
+        &#34;&#34;&#34;
+        return self.data[key]</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="decoder.Section.get_property"><code class="name flex">
+<span>def <span class="ident">get_property</span></span>(<span>self, key)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Gets the value associated with the key.</p>
+<h2 id="arguments">Arguments</h2>
+<p>key {str} &ndash; the string representing the key</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>KeyError</code> &ndash; <code>if</code> <code>the</code> <code>key</code> <code>doesn't</code> <code>exist</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code> &ndash; <code>the</code> <code>value</code> of <code>the</code> <code>key</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_property(self, key):
+    &#34;&#34;&#34;Gets the value associated with the key.
+
+    Arguments:
+        key {str} -- the string representing the key
+
+    Raises:
+        KeyError -- if the key doesn&#39;t exist
+
+    Returns:
+        str -- the value of the key
+    &#34;&#34;&#34;
+    return self.data[key]</code></pre>
+</details>
+</dd>
+<dt id="decoder.Section.set_property"><code class="name flex">
+<span>def <span class="ident">set_property</span></span>(<span>self, key, val)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Adds a property to the current section.</p>
+<h2 id="arguments">Arguments</h2>
+<p>key {str} &ndash; the name of the key
+val {str} &ndash; the value associated with the key</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_property(self, key, val):
+    &#34;&#34;&#34;Adds a property to the current section.
+
+    Arguments:
+        key {str} -- the name of the key
+        val {str} -- the value associated with the key
+    &#34;&#34;&#34;
+    self.data[key] = val</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="decoder.DMIParser" href="#decoder.DMIParser">DMIParser</a></code></h4>
+<ul class="">
+<li><code><a title="decoder.DMIParser.count_tabs" href="#decoder.DMIParser.count_tabs">count_tabs</a></code></li>
+<li><code><a title="decoder.DMIParser.parse_dmi" href="#decoder.DMIParser.parse_dmi">parse_dmi</a></code></li>
+<li><code><a title="decoder.DMIParser.parse_handle" href="#decoder.DMIParser.parse_handle">parse_handle</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="decoder.Section" href="#decoder.Section">Section</a></code></h4>
+<ul class="">
+<li><code><a title="decoder.Section.get_property" href="#decoder.Section.get_property">get_property</a></code></li>
+<li><code><a title="decoder.Section.set_property" href="#decoder.Section.set_property">set_property</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
