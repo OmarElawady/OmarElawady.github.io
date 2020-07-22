@@ -1,0 +1,3 @@
+# Page initialization
+
+When the page is loaded, the dom is walked to determine the elements that represent livewire components. Those elements are distinguished by having the attribute "wire:id". When a component is encountered, a new object representing the component is created and added to a global object called componentRegistry. The component is responsible for keeping track of its own data and it rendering. It doesn't rerender its nested components or affect its data in any way.
