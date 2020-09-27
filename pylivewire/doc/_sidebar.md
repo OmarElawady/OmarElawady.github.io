@@ -1,4 +1,5 @@
 - [**Installation**](installation.md)
+- [**Quick start**](quickstart.md)
 - [**Components**](core/core.md)
     - [Component classes](core/comp_class.md)
     - [Rendering componentes](core/rendering.md)
